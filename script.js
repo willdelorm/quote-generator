@@ -6,6 +6,7 @@ const newQuoteBtn = document.getElementById('new-quote');
 const loader = document.getElementById('loader');
 
 let apiQuotes = [];
+let errors = 0;
 
 function showLoadingSpin() {
   loader.hidden = false;
@@ -49,7 +50,13 @@ async function getQuotes() {
     apiQuotes = await response.json();
     newQuote();
   } catch (error) {
-    // Catch Error here
+    errors++;
+    if (errors > 10) {
+      quoteText.textContent = "Unable to access quote list";
+      authorText.textContent = "Please try again later";
+    } else {
+      getQuotes();
+    }
   }
 }
 
